@@ -1,0 +1,103 @@
+import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:google_fonts/google_fonts.dart';
+
+import 'core/constants/app_constants.dart';
+import 'features/splash/splash_screen.dart';
+import 'features/auth/screens/login_screen.dart';
+import 'features/auth/screens/register_screen.dart';
+import 'features/home/screens/main_screen.dart';
+import 'features/product/screens/product_detail_screen.dart';
+import 'features/search/screens/search_screen.dart';
+import 'features/wishlist/screens/wishlist_screen.dart';
+import 'features/orders/screens/orders_screen.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(
+    const ProviderScope(
+      child: VedashiApp(),
+    ),
+  );
+}
+
+class VedashiApp extends StatelessWidget {
+  const VedashiApp({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: AppConstants.appName,
+      debugShowCheckedModeBanner: false,
+      theme: ThemeData(
+        useMaterial3: true,
+        primaryColor: AppColors.primary,
+        scaffoldBackgroundColor: AppColors.background,
+        colorScheme: ColorScheme.fromSeed(
+          seedColor: AppColors.primary,
+          primary: AppColors.primary,
+          secondary: AppColors.accent,
+          background: AppColors.background,
+          surface: AppColors.surface,
+          error: AppColors.error,
+        ),
+        textTheme: GoogleFonts.interTextTheme(
+          Theme.of(context).textTheme,
+        ).apply(
+          bodyColor: AppColors.textPrimary,
+          displayColor: AppColors.textPrimary,
+        ),
+        appBarTheme: const AppBarTheme(
+          centerTitle: true,
+          elevation: 0,
+          backgroundColor: AppColors.surface,
+          iconTheme: IconThemeData(color: AppColors.textPrimary),
+          titleTextStyle: TextStyle(
+            color: AppColors.textPrimary,
+            fontSize: 18,
+            fontWeight: FontWeight.w600,
+            fontFamily: AppTextStyles.fontFamily,
+          ),
+        ),
+      ),
+      initialRoute: '/',
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/':
+            return MaterialPageRoute(builder: (_) => const SplashScreen());
+          case '/login':
+            return MaterialPageRoute(builder: (_) => const LoginScreen());
+          case '/register':
+            return MaterialPageRoute(builder: (_) => const RegisterScreen());
+          case '/main':
+            return MaterialPageRoute(builder: (_) => const MainScreen());
+          case '/search':
+            return MaterialPageRoute(builder: (_) => const SearchScreen());
+          case '/wishlist':
+            return MaterialPageRoute(builder: (_) => const WishlistScreen());
+          case '/orders':
+            return MaterialPageRoute(builder: (_) => const OrdersScreen());
+          case '/product-detail':
+            final productId = settings.arguments as String?;
+            if (productId == null) return _errorRoute();
+            return MaterialPageRoute(
+              builder: (_) => ProductDetailScreen(productId: productId),
+            );
+          default:
+            return _errorRoute();
+        }
+      },
+    );
+  }
+
+  Route _errorRoute() {
+    return MaterialPageRoute(
+      builder: (_) => Scaffold(
+        appBar: AppBar(title: const Text('Error')),
+        body: const Center(
+          child: Text('Page not found'),
+        ),
+      ),
+    );
+  }
+}
