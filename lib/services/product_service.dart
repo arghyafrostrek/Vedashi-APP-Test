@@ -113,8 +113,10 @@ class ProductService {
   /// GET /api/products/featured
   Future<List<Product>> getFeaturedProducts() async {
     final response = await _api.get(ApiConstants.featuredProducts);
-    if (response.data['success'] == true && response.data['data'] is List) {
-      return (response.data['data'] as List).map((p) => Product.fromJson(p)).toList();
+    if (response.data['success'] == true) {
+      final data = response.data['data'];
+      List products = data is List ? data : (data['products'] ?? data ?? []);
+      return products.map((p) => Product.fromJson(p)).toList();
     }
     return [];
   }
@@ -122,8 +124,10 @@ class ProductService {
   /// GET /api/products/new-arrivals
   Future<List<Product>> getNewArrivals({int limit = 10}) async {
     final response = await _api.get(ApiConstants.newArrivals, queryParameters: {'limit': limit});
-    if (response.data['success'] == true && response.data['data'] is List) {
-      return (response.data['data'] as List).map((p) => Product.fromJson(p)).toList();
+    if (response.data['success'] == true) {
+      final data = response.data['data'];
+      List products = data is List ? data : (data['products'] ?? data ?? []);
+      return products.map((p) => Product.fromJson(p)).toList();
     }
     return [];
   }

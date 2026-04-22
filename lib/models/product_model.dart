@@ -65,6 +65,9 @@ class Product {
   final bool isOnSale;
   final bool isEditorPick;
   final bool isTrending;
+  final bool isNewArrival;
+  final bool isBestSeller;
+  final bool isFeatured;
   final String? countryOfOrigin;
   final String? form;
   final String? unitOfMeasure;
@@ -76,6 +79,9 @@ class Product {
   final Map<String, dynamic>? specifications;
   final Map<String, dynamic>? seo;
   final String? createdAt;
+  final String? manufacturer;
+  final List<String> specialities;
+  final List<String> searchKeywords;
 
   Product({
     required this.productId,
@@ -95,6 +101,9 @@ class Product {
     this.isOnSale = false,
     this.isEditorPick = false,
     this.isTrending = false,
+    this.isNewArrival = false,
+    this.isBestSeller = false,
+    this.isFeatured = false,
     this.countryOfOrigin,
     this.form,
     this.unitOfMeasure,
@@ -106,6 +115,9 @@ class Product {
     this.specifications,
     this.seo,
     this.createdAt,
+    this.manufacturer,
+    this.specialities = const [],
+    this.searchKeywords = const [],
   });
 
   factory Product.fromJson(Map<String, dynamic> json) {
@@ -146,23 +158,39 @@ class Product {
       shortDescription: json['short_description'],
       thumbnailUrl: json['thumbnail_url'],
       price: _parseDouble(json['price']),
-      salePrice: json['sale_price'] != null ? _parseDouble(json['sale_price']) : null,
+      salePrice: json['sale_price'] != null
+          ? _parseDouble(json['sale_price'])
+          : (json['original_price'] != null ? _parseDouble(json['original_price']) : null),
       quantity: _parseInt(json['quantity'] ?? json['stock_quantity']),
       status: json['status'] ?? 'active',
       isOnSale: json['is_on_sale'] ?? false,
       isEditorPick: json['is_editor_pick'] ?? false,
       isTrending: json['is_trending'] ?? false,
+      isNewArrival: json['is_new_arrival'] ?? false,
+      isBestSeller: json['is_best_seller'] ?? false,
+      isFeatured: json['is_featured'] ?? false,
       countryOfOrigin: json['country_of_origin'],
       form: json['form'],
       unitOfMeasure: json['unit_of_measure'],
-      averageRating: json['average_rating'] != null ? _parseDouble(json['average_rating']) : null,
+      averageRating: json['average_rating'] != null
+          ? _parseDouble(json['average_rating'])
+          : (json['avg_rating'] != null ? _parseDouble(json['avg_rating']) : null),
       reviewCount: json['review_count'] != null ? _parseInt(json['review_count']) : null,
-      totalSold: json['total_sold'] != null ? _parseInt(json['total_sold']) : null,
+      totalSold: json['total_sold'] != null
+          ? _parseInt(json['total_sold'])
+          : (json['total_sales'] != null ? _parseInt(json['total_sales']) : null),
       variants: variants,
       images: imageList,
       specifications: json['specifications'] is Map ? Map<String, dynamic>.from(json['specifications']) : null,
       seo: json['seo'] is Map ? Map<String, dynamic>.from(json['seo']) : null,
       createdAt: json['created_at'],
+      manufacturer: json['manufacturer'],
+      specialities: json['specialities'] is List
+          ? (json['specialities'] as List).map((e) => e.toString()).toList()
+          : const [],
+      searchKeywords: json['search_keywords'] is List
+          ? (json['search_keywords'] as List).map((e) => e.toString()).toList()
+          : const [],
     );
   }
 

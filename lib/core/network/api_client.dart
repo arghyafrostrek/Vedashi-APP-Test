@@ -11,7 +11,12 @@ class ApiClient {
   factory ApiClient() => _instance;
 
   late final Dio dio;
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage(
+    webOptions: WebOptions(
+      dbName: 'vedashi_secure_storage',
+      publicKey: 'vedashi_app',
+    ),
+  );
 
   // Callback to trigger logout from providers
   Function? onUnauthorized;

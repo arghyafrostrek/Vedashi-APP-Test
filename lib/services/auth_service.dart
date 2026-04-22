@@ -5,7 +5,12 @@ import '../models/user_model.dart';
 
 class AuthService {
   final ApiClient _api = ApiClient();
-  final FlutterSecureStorage _storage = const FlutterSecureStorage();
+  final FlutterSecureStorage _storage = const FlutterSecureStorage(
+    webOptions: WebOptions(
+      dbName: 'vedashi_secure_storage',
+      publicKey: 'vedashi_app',
+    ),
+  );
 
   /// POST /api/auth/login
   Future<Map<String, dynamic>> login(String email, String password) async {

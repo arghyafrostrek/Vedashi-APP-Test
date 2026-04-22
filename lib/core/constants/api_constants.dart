@@ -1,7 +1,7 @@
 /// All API endpoints extracted from Vedashi backend repository.
-/// Base URL: https://ecommerce-backend-h23p.onrender.com
+/// Base URL: https://vedashi.com
 class ApiConstants {
-  static const String baseUrl = 'https://ecommerce-backend-h23p.onrender.com';
+  static const String baseUrl = 'https://vedashi.com';
   static const String apiPrefix = '/api';
 
   // ─── Auth ──────────────────────────────────────────────────

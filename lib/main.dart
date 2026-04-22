@@ -2,6 +2,13 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'core/constants/app_constants.dart';
 import 'features/splash/splash_screen.dart';
+import 'features/auth/screens/login_screen.dart';
+import 'features/auth/screens/register_screen.dart';
+import 'features/home/screens/main_screen.dart';
+import 'features/product/screens/product_detail_screen.dart';
+import 'features/search/screens/search_screen.dart';
+import 'features/orders/screens/orders_screen.dart';
+import 'features/wishlist/screens/wishlist_screen.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -29,21 +36,28 @@ class VedashiApp extends StatelessWidget {
         ),
       ),
       home: const SplashScreen(),
-      routes: {
-        '/login': (_) => Scaffold(
-          backgroundColor: const Color(0xFF1A3A1A),
-          body: Center(child: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              const Icon(Icons.eco_rounded, size: 64, color: Color(0xFF91CA35)),
-              const SizedBox(height: 16),
-              const Text('Login Screen', style: TextStyle(fontSize: 24, color: Colors.white)),
-              const SizedBox(height: 8),
-              Text('App is working!', style: TextStyle(fontSize: 16, color: Colors.white70)),
-            ],
-          )),
-        ),
-        '/main': (_) => const Scaffold(body: Center(child: Text('Home'))),
+      onGenerateRoute: (settings) {
+        switch (settings.name) {
+          case '/login':
+            return MaterialPageRoute(builder: (_) => const LoginScreen());
+          case '/register':
+            return MaterialPageRoute(builder: (_) => const RegisterScreen());
+          case '/main':
+            return MaterialPageRoute(builder: (_) => const MainScreen());
+          case '/search':
+            return MaterialPageRoute(builder: (_) => const SearchScreen());
+          case '/orders':
+            return MaterialPageRoute(builder: (_) => const OrdersScreen());
+          case '/wishlist':
+            return MaterialPageRoute(builder: (_) => const WishlistScreen());
+          case '/product-detail':
+            final productId = settings.arguments as String;
+            return MaterialPageRoute(
+              builder: (_) => ProductDetailScreen(productId: productId),
+            );
+          default:
+            return MaterialPageRoute(builder: (_) => const SplashScreen());
+        }
       },
     );
   }
